@@ -16,12 +16,12 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hexlet-boilerplates/fastify-nodejs-application.git"
+    "url": "git+https://github.com/EvgeniyKoch/backend-project-lvl4"
   },
   "bugs": {
-    "url": "https://github.com/hexlet-boilerplates/fastify-nodejs-application/issues"
+    "url": "https://github.com/EvgeniyKoch/backend-project-lvl4/issues"
   },
-  "homepage": "https://github.com/hexlet-boilerplates/fastify-nodejs-application.git#readme",
+  "homepage": "https://github.com/EvgeniyKoch/backend-project-lvl4#readme",
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
