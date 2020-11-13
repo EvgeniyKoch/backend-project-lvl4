@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "checkJs": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
-  }
+  },
+  "exclude": ["node_modules", "**/node_modules/*"]
 }
