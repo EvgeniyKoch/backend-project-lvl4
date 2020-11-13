@@ -13,8 +13,10 @@ module.exports = {
   },
   devServer: {
     publicPath: '/assets/',
-    host: '0.0.0.0',
-    port: 5001,
+    contentBase: path.join(__dirname, 'dist', 'public'),
+    host: 'localhost',
+    port: 8080,
+    compress: true,
   },
   module: {
     rules: [
