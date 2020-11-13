@@ -1,3 +1,1 @@
-# Tasks manager
-
-## [Site](https://hexlet-tasks-manager.herokuapp.com/)
+# [Tasks manager](https://hexlet-tasks-manager.herokuapp.com/)
