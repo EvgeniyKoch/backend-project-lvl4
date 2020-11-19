@@ -3,7 +3,6 @@ setup:
 	npx knex migrate:latest
 
 build:
-	rm -rf dist
 	npm run build
 
 prepare:
