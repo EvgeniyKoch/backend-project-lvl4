@@ -1,5 +1,6 @@
 import path from 'path';
 import fastify from 'fastify';
+// import fastifyExpression from 'fastify-express';
 import fastifyStatic from 'fastify-static';
 import fastifyErrorPage from 'fastify-error-page';
 import pointOfView from 'point-of-view';
@@ -63,15 +64,14 @@ const setUpStaticAssets = (app) => {
 };
 
 const setupLocalization = () => {
-  i18next
-    .init({
-      lng: 'ru',
-      fallbackLng: 'en',
-      debug: isDevelopment,
-      resources: {
-        ru,
-      },
-    });
+  i18next.init({
+    lng: 'ru',
+    fallbackLng: 'en',
+    debug: isDevelopment,
+    resources: {
+      ru,
+    },
+  });
 };
 
 const addHooks = (app) => {
@@ -81,17 +81,21 @@ const addHooks = (app) => {
   app.addHook('preHandler', async (req) => {
     const userId = req.session.get('userId');
     if (userId) {
-      req.currentUser = await app.objection.models.user.query().findById(userId);
+      req.currentUser = await app.objection.models.user
+        .query()
+        .findById(userId);
       req.signedIn = true;
     }
   });
 
   app.addHook('onError', async (request, reply, error) => {
+    // hook for custom error logging
     rollbar.error(error);
   });
 };
 
 const registerPlugins = (app) => {
+  // app.register(fastifyExpression); // register middleware
   app.register(fastifyErrorPage);
   app.register(fastifyReverseRoutes.plugin);
   app.register(fastifyFormbody);
@@ -124,6 +128,8 @@ export default () => {
   setUpStaticAssets(app);
   addRoutes(app);
   addHooks(app);
+
+  // app.use(rollbar.errorHandler()); // doesn't work, so us hook 'onError'
 
   return app;
 };
