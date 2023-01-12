@@ -1,2 +1,14 @@
-### Hexlet tests and linter status:
-[![Actions Status](https://github.com/EvgeniyKoch/backend-project-lvl4/workflows/hexlet-check/badge.svg)](https://github.com/EvgeniyKoch/backend-project-lvl4/actions)
+# fastify-nodejs-application
+
+## Setup
+
+```bash
+make setup
+```
+
+## Run
+
+```bash
+$ make start
+# Open localhost:5000
+```
