@@ -11,8 +11,6 @@ describe('test users CRUD', () => {
   let app;
   let knex;
   let models;
-  let userFromBase;
-  let cookie;
   const testData = getTestData();
 
   beforeAll(async () => {
@@ -32,7 +30,7 @@ describe('test users CRUD', () => {
     await prepareData(app);
   });
 
-  beforeEach(() => {});
+  beforeEach(async () => {});
 
   it('index', async () => {
     const response = await app.inject({
@@ -74,30 +72,58 @@ describe('test users CRUD', () => {
   });
 
   it('update', async () => {
-    const user = await models.user.query().findOne({ id: 1 });
+    const params = testData.users.new;
+    // создать user
+    const responseCreateUser = await app.inject({
+      method: 'POST',
+      url: app.reverse('users'),
+      payload: {
+        data: params,
+      },
+    });
+
+    expect(responseCreateUser.statusCode).toBe(200);
+
+    // Авторизуемся в приложении
+    const responseSignIn = await app.inject({
+      method: 'POST',
+      url: app.reverse('session'),
+      payload: { data: params },
+    });
+
+    expect(responseSignIn.statusCode).toBe(302);
+
+    // Получаем пользователя
+    const user = await models.user.query().findOne({ email: params.email });
     const { update } = testData.users;
-    // get created user page
+    const [{ name, value }] = responseSignIn.cookies;
+    const cookie = { [name]: value };
+
+    // Получаем страницу созданного пользователя
     const response = await app.inject({
       method: 'GET',
       url: app.reverse('editUser', { id: user.id }),
+      cookies: cookie,
     });
 
     expect(response.statusCode).toBe(200);
 
-    // // update user data
-    // const resUpdateUser = await app.inject({
-    //   method: 'PATCH',
-    //   url: app.reverse('updateUser', { id: user.id }),
-    //   payload: {
-    //     data: update,
-    //   },
-    // });
-    //
-    // expect(resUpdateUser.statusCode).toBe(302);
-    //
-    // // check, updated user data
-    // const updatedUser = await models.user.query().findById(user.id);
-    // expect(updatedUser.email).toBe(update.email);
+    // Обновляем данные пользователя
+    const resUpdateUser = await app.inject({
+      method: 'PATCH',
+      url: app.reverse('edit', { id: user.id }),
+      payload: {
+        data: update,
+      },
+    });
+
+    expect(resUpdateUser.statusCode).toBe(302);
+
+    // Проверяем, что данные пользователя были успешно обновлены
+    const updatedUser = await models.user.query().findById(user.id);
+    expect(updatedUser.email).toBe(update.email);
+    expect(updatedUser.firstName).toBe(update.firstName);
+    expect(updatedUser.lastName).toBe(update.lastName);
   });
 
   afterEach(async () => {
