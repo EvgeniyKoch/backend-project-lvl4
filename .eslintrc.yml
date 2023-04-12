@@ -26,4 +26,4 @@ rules:
       ignorePropertyModificationsFor:
         - req
         - reply
-  no-underscore-dangle: [2, { "allow": ["__filename", "__dirname"] }]
+  no-underscore-dangle: [ 2, { "allow": [ "__filename", "__dirname" ] } ]

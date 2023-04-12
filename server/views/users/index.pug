@@ -5,11 +5,20 @@ block content
     thead
       tr
         th= t('views.users.id')
+        th= t('views.users.fullName')
         th= t('views.users.email')
         th= t('views.users.createdAt')
+        if isAuthenticated()
+          th= t('views.users.actions')
     tbody
       each user in users
         tr
           td= user.id
+          td= user.fullName
           td= user.email
           td= formatDate(user.createdAt)
+          if isAuthenticated()
+            td
+              .btn-group(role='group' aria-label='Basic mixed styles example')
+                a.btn.btn-info(href=route('editUser', { id: user.id } ) role='button') Edit
+                //a.btn.btn-danger(href='#link' role='button') Delete

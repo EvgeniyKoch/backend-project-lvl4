@@ -11,16 +11,26 @@ module.exports = class User extends unique(BaseModel) {
     return 'users';
   }
 
+  static get virtualAttributes() {
+    return ['fullName'];
+  }
+
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['email', 'password'],
+      required: ['firstName', 'lastName', 'email', 'password'],
       properties: {
         id: { type: 'integer' },
-        email: { type: 'string', minLength: 1 },
+        firstName: { type: 'string', minLength: 1, maxLength: 255 },
+        lastName: { type: 'string', minLength: 1, maxLength: 255 },
+        email: { type: 'string', minLength: 3 },
         password: { type: 'string', minLength: 3 },
       },
     };
+  }
+
+  get fullName() {
+    return `${this.firstName} ${this.lastName}`;
   }
 
   set password(value) {

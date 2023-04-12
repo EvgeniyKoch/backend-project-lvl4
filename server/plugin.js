@@ -3,8 +3,6 @@
 import { fileURLToPath } from 'url';
 import path from 'path';
 import fastifyStatic from '@fastify/static';
-// NOTE: не поддердивает fastify 4.x
-// import fastifyErrorPage from 'fastify-error-page';
 import fastifyView from '@fastify/view';
 import fastifyFormbody from '@fastify/formbody';
 import fastifySecureSession from '@fastify/secure-session';
@@ -29,7 +27,7 @@ import FormStrategy from './lib/passportStrategies/FormStrategy.js';
 const __dirname = fileURLToPath(path.dirname(import.meta.url));
 
 const mode = process.env.NODE_ENV || 'development';
-// const isDevelopment = mode === 'development';
+const isDevelopment = mode === 'development';
 
 const setUpViews = (app) => {
   const helpers = getHelpers(app);
@@ -63,7 +61,7 @@ const setupLocalization = async () => {
     .init({
       lng: 'en',
       fallbackLng: 'ru',
-      // debug: isDevelopment,
+      debug: isDevelopment,
       resources: {
         ru,
         en,
@@ -81,7 +79,6 @@ const addHooks = (app) => {
 
 const registerPlugins = async (app) => {
   await app.register(fastifySensible);
-  // await app.register(fastifyErrorPage);
   await app.register(fastifyReverseRoutes);
   await app.register(fastifyFormbody, { parser: qs.parse });
   await app.register(fastifySecureSession, {

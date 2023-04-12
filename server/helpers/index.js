@@ -4,8 +4,8 @@ import i18next from 'i18next';
 import _ from 'lodash';
 
 export default (app) => ({
-  route(name) {
-    return app.reverse(name);
+  route(name, query) {
+    return app.reverse(name, query);
   },
   t(key) {
     return i18next.t(key);

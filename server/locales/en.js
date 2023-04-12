@@ -18,6 +18,11 @@ export default {
           error: 'Failed to register',
           success: 'User registered successfully',
         },
+        update: {
+          success: 'User updated successfully',
+          error: 'User updated failed',
+          notFound: 'User not found',
+        },
       },
       authError: 'Access denied! Please login',
     },
@@ -38,8 +43,10 @@ export default {
       },
       users: {
         id: 'ID',
+        fullName: 'Full Name',
         email: 'Email',
         createdAt: 'Created at',
+        actions: 'Actions',
         new: {
           submit: 'Register',
           signUp: 'Register',

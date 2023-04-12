@@ -11,6 +11,8 @@ describe('test users CRUD', () => {
   let app;
   let knex;
   let models;
+  let userFromBase;
+  let cookie;
   const testData = getTestData();
 
   beforeAll(async () => {
@@ -30,8 +32,7 @@ describe('test users CRUD', () => {
     await prepareData(app);
   });
 
-  beforeEach(async () => {
-  });
+  beforeEach(() => {});
 
   it('index', async () => {
     const response = await app.inject({
@@ -62,12 +63,41 @@ describe('test users CRUD', () => {
     });
 
     expect(response.statusCode).toBe(302);
+
     const expected = {
       ..._.omit(params, 'password'),
       passwordDigest: encrypt(params.password),
     };
     const user = await models.user.query().findOne({ email: params.email });
+
     expect(user).toMatchObject(expected);
+  });
+
+  it('update', async () => {
+    const user = await models.user.query().findOne({ id: 1 });
+    const { update } = testData.users;
+    // get created user page
+    const response = await app.inject({
+      method: 'GET',
+      url: app.reverse('editUser', { id: user.id }),
+    });
+
+    expect(response.statusCode).toBe(200);
+
+    // // update user data
+    // const resUpdateUser = await app.inject({
+    //   method: 'PATCH',
+    //   url: app.reverse('updateUser', { id: user.id }),
+    //   payload: {
+    //     data: update,
+    //   },
+    // });
+    //
+    // expect(resUpdateUser.statusCode).toBe(302);
+    //
+    // // check, updated user data
+    // const updatedUser = await models.user.query().findById(user.id);
+    // expect(updatedUser.email).toBe(update.email);
   });
 
   afterEach(async () => {
