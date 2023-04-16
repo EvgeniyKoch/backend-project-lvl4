@@ -8,3 +8,5 @@ temp/
 database.sqlite
 .env
 .DS_Store
+
+infofile.txt

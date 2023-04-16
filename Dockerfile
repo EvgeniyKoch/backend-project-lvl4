@@ -14,8 +14,11 @@ COPY package-lock.json .
 RUN npm ci
 
 COPY . .
+COPY database.sqlite /app/database.sqlite
 
 ENV NODE_ENV=production
 RUN make build
+
+EXPOSE 3000
 
 CMD ["bash", "-c", "make db-migrate && npm start"]
