@@ -13,14 +13,13 @@ $ make start
 # Open localhost:5000
 ```
 
-## docker
+## or docker
 
 ```
-docker build -t backendLvl4 .
+docker build -t <image name> .
 
-docker run -p 3000:3000 -e SESSION_KEY=<your_key> -v /path/to/project/database.sqlite:/app/database.sqlite backendLvl4
+docker run -d -p 3000:3000 <image name>
+# Open localhost:3000
 
 You can are watching your db on "DB Browser for SQLite"
-
-docker-compose up
 ```

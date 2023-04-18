@@ -14,9 +14,10 @@ COPY package-lock.json .
 RUN npm ci
 
 COPY . .
-COPY database.sqlite /app/database.sqlite
 
+ENV SESSION_KEY=4fe91796c30bd989d95b62dc46c7c3ba0b6aa2df2187400586a4121c54c53b85
 ENV NODE_ENV=production
+
 RUN make build
 
 EXPOSE 3000
