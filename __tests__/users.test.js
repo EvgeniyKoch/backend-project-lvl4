@@ -126,6 +126,42 @@ describe('test users CRUD', () => {
     expect(updatedUser.lastName).toBe(update.lastName);
   });
 
+  it('delete', async () => {
+    const params = testData.users.new;
+
+    // создать user
+    const responseCreateUser = await app.inject({
+      method: 'POST',
+      url: app.reverse('users'),
+      payload: {
+        data: params,
+      },
+    });
+
+    expect(responseCreateUser.statusCode).toBe(302);
+
+    // Авторизуемся в приложении
+    const responseSignIn = await app.inject({
+      method: 'POST',
+      url: app.reverse('session'),
+      payload: { data: params },
+    });
+
+    expect(responseSignIn.statusCode).toBe(302);
+
+    // Удаляем пользователя
+    const user = await models.user.query().findOne({ email: params.email });
+    const [{ name, value }] = responseSignIn.cookies;
+    const cookie = { [name]: value };
+    const responseDeleted = await app.inject({
+      method: 'DELETE',
+      url: app.reverse('deleteUser', { id: user.id }),
+      cookies: cookie,
+    });
+
+    expect(responseDeleted.statusCode).toBe(302);
+  });
+
   afterEach(async () => {
     // Пока Segmentation fault: 11
     // после каждого теста откатываем миграции

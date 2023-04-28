@@ -22,6 +22,12 @@ export default {
           success: 'User updated successfully',
           error: 'User updated failed',
           notFound: 'User not found',
+          notAvalible: 'You can\'t  update other user',
+        },
+        delete: {
+          success: 'User successfully deleted',
+          error: 'User deleted failed',
+          notAvalible: 'You can\'t  delete other user',
         },
       },
       authError: 'Access denied! Please login',

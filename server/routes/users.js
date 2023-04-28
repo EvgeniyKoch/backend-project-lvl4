@@ -1,15 +1,14 @@
 // @ts-check
 
 import i18next from 'i18next';
-
 export default (app) => {
   app
-    .get('/users', { name: 'users' }, async (req, reply) => {
+    .get('/users', { name: 'users' }, async (_, reply) => {
       const users = await app.objection.models.user.query();
       reply.render('users/index', { users });
       return reply;
     })
-    .get('/users/new', { name: 'newUser' }, (req, reply) => {
+    .get('/users/new', { name: 'newUser' }, (_, reply) => {
       const user = new app.objection.models.user();
       reply.render('users/new', { user });
     })
@@ -19,7 +18,6 @@ export default (app) => {
 
       try {
         const validUser = await app.objection.models.user.fromJson(req.body.data);
-        console.log(validUser, '==============================validUser');
         await app.objection.models.user.query().insert(validUser);
         req.flash('info', i18next.t('flash.users.create.success'));
         reply.redirect(app.reverse('root'));
@@ -38,7 +36,7 @@ export default (app) => {
         return reply;
       }
 
-      req.flash('error', i18next.t('flash.users.update.notFound'));
+      req.flash('error', i18next.t('flash.users.update.notAvalible'));
       reply.redirect(app.reverse('users'));
       return reply;
     })
@@ -55,6 +53,24 @@ export default (app) => {
         reply.render('users/editUser', { user: req.user, errors: e.data });
       }
 
+      return reply;
+    })
+    .delete('/users/:id', { name: 'deleteUser' }, async (req, reply) => {
+      if (req.user.id.toString() === req.params.id) {
+        const deletedCount = await app.objection.models.user.query().deleteById(req.params.id);
+        if (deletedCount === 1) {
+          req.flash('info', i18next.t('flash.users.delete.success'));
+          req.logOut();
+          reply.redirect(app.reverse('root'));
+        } else {
+          req.flash('error', i18next.t('flash.users.delete.error'));
+          reply.redirect(app.reverse('users'));
+        }
+        return reply;
+      }
+
+      req.flash('error', i18next.t('flash.users.delete.notAvalible'));
+      reply.redirect(app.reverse('users'));
       return reply;
     });
 };

@@ -21,4 +21,4 @@ block content
             td
               .btn-group(role='group' aria-label='Basic mixed styles example')
                 a.btn.btn-info(href=route('editUser', { id: user.id } ) role='button') Edit
-                a.btn.btn-danger(href='#link' role='button') Delete!!
+                +buttonTo(route('deleteUser', { id: user.id }), 'delete')(class="btn btn-danger" value='Delete')

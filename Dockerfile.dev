@@ -8,14 +8,14 @@ RUN ln -s /usr/bin/python3 /usr/bin/python
 
 WORKDIR /app
 
-COPY package.json .
-COPY package-lock.json .
+COPY package*.json ./
 
-RUN npm ci
+RUN npm install
 
 COPY . .
 
-ENV NODE_ENV=production
-RUN make build
+RUN make setup
 
-CMD ["bash", "-c", "make db-migrate && npm start"]
+CMD ["bash", "-c", "make start-backend | make start-frontend"]
+
+
