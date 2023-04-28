@@ -15,7 +15,7 @@ env:
   jest: true
 
 rules:
-  no-console: 0
+  no-console: 1
   import/extensions: 0
   new-cap:
     - error
@@ -27,3 +27,12 @@ rules:
         - req
         - reply
   no-underscore-dangle: [ 2, { "allow": [ "__filename", "__dirname" ] } ]
+  no-unused-vars: [ "error", {
+      "vars": "local",
+      "args": "all",
+      "argsIgnorePattern": "^_",
+      "ignoreRestSiblings": true,
+      "destructuredArrayIgnorePattern": "[A-Z]",
+      "caughtErrors": "none",
+    }
+  ]

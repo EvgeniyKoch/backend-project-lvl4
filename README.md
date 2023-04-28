@@ -16,10 +16,6 @@ $ make start
 ## or docker
 
 ```
-docker build -t <image name> .
-
-docker run -d -p 3000:3000 <image name>
+docker-compose up
 # Open localhost:3000
-
-You can are watching your db on "DB Browser for SQLite"
 ```
