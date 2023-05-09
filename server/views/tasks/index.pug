@@ -1,0 +1,23 @@
+extends ../layouts/application.pug
+
+block content
+    h1(class="display-4 fw-bold mt-4")=t('layouts.application.tasks')
+    +buttonTo(route('newTask'), 'post')(class="btn btn-primary btn-lg" value=t('views.tasks.create'))
+    table.table.table-striped
+        thead
+            tr
+                th= t('views.tasks.table.id')
+                th= t('views.tasks.table.name')
+                th= t('views.tasks.table.status')
+                th= t('views.tasks.table.author')
+                th= t('views.tasks.table.executer')
+                th= t('views.tasks.table.date')
+        tbody
+            each task in tasks
+                tr
+                    td= task.id
+                    td= task.name
+                    td= task.status
+                    td= task.author
+                    td= task.executer
+                    //td= task.create_at

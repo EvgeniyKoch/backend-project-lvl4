@@ -30,6 +30,20 @@ export default {
           notAvalible: 'You can\'t  delete other user',
         },
       },
+      statuses: {
+        create: {
+          error: 'Failed to create new status',
+          success: 'Status created',
+        },
+        edit: {
+          error: 'Failed to edit status',
+          success: 'Status edited',
+        },
+        delete: {
+          error: 'Failed to delete status',
+          success: 'Status was deleted',
+        },
+      },
       authError: 'Access denied! Please login',
     },
     layouts: {
@@ -38,6 +52,8 @@ export default {
         signIn: 'Login',
         signUp: 'Register',
         signOut: 'Logout',
+        tasks: 'Tasks',
+        statuses: 'Statuses',
       },
     },
     views: {
@@ -63,6 +79,33 @@ export default {
           hello: 'Hello from Hexlet!',
           description: 'Online programming school',
           more: 'Learn more',
+        },
+      },
+      statuses: {
+        title: 'Statuses',
+        new: 'Creating a status',
+        edit: {
+          title: 'Editing a status',
+          btn: 'Edit',
+        },
+        table: {
+          id: 'Id',
+          name: 'Name',
+          date: 'Create date',
+        },
+        create: {
+          title: 'Create status',
+        },
+      },
+      tasks: {
+        create: 'Create task',
+        table: {
+          id: 'Id',
+          name: 'Name',
+          status: 'Status',
+          author: 'Author',
+          executer: 'Exucuter',
+          date: 'Create date',
         },
       },
     },
