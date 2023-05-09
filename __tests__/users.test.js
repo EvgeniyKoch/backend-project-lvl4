@@ -11,6 +11,7 @@ describe('test users CRUD', () => {
   let app;
   let knex;
   let models;
+  let cookies;
   const testData = getTestData();
 
   beforeAll(async () => {
@@ -52,6 +53,7 @@ describe('test users CRUD', () => {
 
   it('create', async () => {
     const params = testData.users.new;
+
     const response = await app.inject({
       method: 'POST',
       url: app.reverse('users'),
@@ -73,17 +75,6 @@ describe('test users CRUD', () => {
 
   it('update', async () => {
     const params = testData.users.new;
-    // создать user
-    const responseCreateUser = await app.inject({
-      method: 'POST',
-      url: app.reverse('users'),
-      payload: {
-        data: params,
-      },
-    });
-
-    expect(responseCreateUser.statusCode).toBe(200);
-
     // Авторизуемся в приложении
     const responseSignIn = await app.inject({
       method: 'POST',
@@ -97,13 +88,13 @@ describe('test users CRUD', () => {
     const user = await models.user.query().findOne({ email: params.email });
     const { update } = testData.users;
     const [{ name, value }] = responseSignIn.cookies;
-    const cookie = { [name]: value };
+    cookies = { [name]: value };
 
     // Получаем страницу созданного пользователя
     const response = await app.inject({
       method: 'GET',
       url: app.reverse('editUser', { id: user.id }),
-      cookies: cookie,
+      cookies,
     });
 
     expect(response.statusCode).toBe(200);
@@ -127,36 +118,13 @@ describe('test users CRUD', () => {
   });
 
   it('delete', async () => {
-    const params = testData.users.new;
+    const { update } = testData.users;
+    const user = await models.user.query().findOne({ email: update.email });
 
-    // создать user
-    const responseCreateUser = await app.inject({
-      method: 'POST',
-      url: app.reverse('users'),
-      payload: {
-        data: params,
-      },
-    });
-
-    expect(responseCreateUser.statusCode).toBe(302);
-
-    // Авторизуемся в приложении
-    const responseSignIn = await app.inject({
-      method: 'POST',
-      url: app.reverse('session'),
-      payload: { data: params },
-    });
-
-    expect(responseSignIn.statusCode).toBe(302);
-
-    // Удаляем пользователя
-    const user = await models.user.query().findOne({ email: params.email });
-    const [{ name, value }] = responseSignIn.cookies;
-    const cookie = { [name]: value };
     const responseDeleted = await app.inject({
       method: 'DELETE',
       url: app.reverse('deleteUser', { id: user.id }),
-      cookies: cookie,
+      cookies,
     });
 
     expect(responseDeleted.statusCode).toBe(302);
