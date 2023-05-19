@@ -19,10 +19,10 @@ export default (app) => {
       try {
         const validStatus = await app.objection.models.status.fromJson(req.body.data);
         await app.objection.models.status.query().insert(validStatus);
+        reply.redirect(app.reverse('statuses'));
         req.flash('info', i18next.t('flash.statuses.create.success'));
-        reply.redirect(app.reverse('statuses/new'));
       } catch (e) {
-        req.flash('error', i18next.t('falsh.statuses.create.error'));
+        req.flash('error', i18next.t('flash.statuses.create.error'));
         reply.render('statuses/new', { status, errors: e.data });
       }
       return reply;
