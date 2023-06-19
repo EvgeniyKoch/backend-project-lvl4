@@ -1,0 +1,32 @@
+extends ../layouts/application.pug
+
+block content
+    h1(class="display-4 fw-bold mt-4")= task.name
+
+    .row.mt-5.p-5.shadow.bg-white
+        .col-12.col-md-8.order-2.order-md-1
+            .lead.fw-normal.mb-4= task.description
+        .col-12.col-md-4.border-start.px-3.order-1.order-md-2.mb-3.mb-md-0
+            .mb-2
+                span.me-1.badge.bg-danger.text-white= task.status.name
+            .d-flex.flex-wrap.mb-3
+                span.text-muted.me-2 Autor
+                span
+                    | #{task.creator.firstName} #{task.creator.lastName}
+            .d-flex.flex-wrap.mb-3
+                span.text-muted.me-2 Executer
+                span
+                    if (task.executor)
+                        | #{task.executor.firstName} #{task.executor.lastName}
+                    else
+                        | not assigned
+            .d-flex.flex-wrap.mb-3
+                span.text-muted.me-2 Date of created
+                span= task.createdAt
+            .d-flex.flex-wrap.mb-3
+                span.text-muted.me-2 Date of updated
+                span= task.updatedAt
+            .d-flex.flex-wrap
+                .btn-group(role='group' aria-label='Basic mixed styles example')
+                    a.btn.btn-primary(href=route('editTaskPage', {id: task.id}) role='button') Edit
+                    +buttonTo(route('deleteTask', {id: task.id}), 'delete')(class="btn btn-danger" value='Delete')

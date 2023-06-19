@@ -15,7 +15,4 @@ block content
                     td= status.id
                     td= status.name
                     td= status.createdAt
-                    td
-                        .btn-group(role='group' aria-label='Basic mixed styles example')
-                            a.btn.btn-primary(href=route('editStatusPage', { id: status.id }) role='button') Edit
-                            +buttonTo(route('deleteStatus', { id: status.id }), 'delete')(class="btn btn-danger" value='Delete')
+

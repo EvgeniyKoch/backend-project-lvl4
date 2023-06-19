@@ -31,6 +31,7 @@ export default {
         },
       },
       statuses: {
+        new: 'Создание задачи',
         create: {
           error: 'Failed to create new status',
           success: 'Status created',
@@ -42,6 +43,20 @@ export default {
         delete: {
           error: 'Failed to delete status',
           success: 'Status was deleted',
+        },
+      },
+      tasks: {
+        create: {
+          error: 'Failed to create new task',
+          success: 'Task created',
+        },
+        edit: {
+          error: 'Failed to edit task',
+          success: 'Task edited',
+        },
+        delete: {
+          error: 'Failed to delete task',
+          success: 'Task was deleted',
         },
       },
       authError: 'Access denied! Please login',
@@ -99,12 +114,17 @@ export default {
       },
       tasks: {
         create: 'Create task',
+        edit: {
+          title: 'Editing task',
+          btn: 'Edit',
+        },
+        new: 'Creating a task',
         table: {
           id: 'Id',
           name: 'Name',
           status: 'Status',
           author: 'Author',
-          executer: 'Exucuter',
+          executor: 'Exucuter',
           date: 'Create date',
         },
       },

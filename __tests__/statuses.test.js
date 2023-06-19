@@ -17,11 +17,6 @@ describe('test statuses CRUD', () => {
     await init(app);
     knex = app.objection.knex;
     models = app.objection.models;
-
-    // TODO: пока один раз перед тестами
-    // тесты не должны зависеть друг от друга
-    // перед каждым тестом выполняем миграции
-    // и заполняем БД тестовыми данными
     await knex.migrate.latest();
     await prepareData(app);
   });
@@ -51,7 +46,7 @@ describe('test statuses CRUD', () => {
       },
     });
 
-    expect(responseCreate.statusCode).toBe(200);
+    expect(responseCreate.statusCode).toBe(302);
 
     const status = await models.status.query().findOne({ name: 'test' });
 
@@ -79,12 +74,6 @@ describe('test statuses CRUD', () => {
     expect(response.statusCode).toBe(302);
     const updatedStatus = await models.status.query().findOne({ id: status.id });
     expect(updatedStatus.name).toBe('another task');
-  });
-
-  afterEach(async () => {
-    // Пока Segmentation fault: 11
-    // после каждого теста откатываем миграции
-    // await knex.migrate.rollback();
   });
 
   afterAll(async () => {
