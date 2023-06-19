@@ -1,6 +1,7 @@
 // @ts-check
 import fastify from 'fastify';
 
+import { it } from '@jest/globals';
 import init from '../server/plugin.js';
 import { getTestData, prepareData } from './helpers/index.js';
 
@@ -42,13 +43,84 @@ describe('test tasks CRUD', () => {
       method: 'GET',
       url: app.reverse('tasks'),
     });
-
     expect(response.statusCode).toBe(200);
   });
-  afterEach(async () => {
-    // Пока Segmentation fault: 11
-    // после каждого теста откатываем миграции
-    // await knex.migrate.rollback();
+
+  it('create', async () => {
+    const response = await app.inject({
+      method: 'GET',
+      url: app.reverse('newTask'),
+    });
+    expect(response.statusCode).toBe(200);
+
+    const responseCreate = await app.inject({
+      method: 'POST',
+      url: app.reverse('createTask'),
+      payload: {
+        data: {
+          name: 'test',
+          description: 'task test',
+          statusId: 1,
+          executorId: 1,
+        },
+      },
+      cookies: cookie,
+    });
+
+    expect(responseCreate.statusCode).toBe(302);
+
+    const task = await models.task.query().findOne({ name: 'test' });
+
+    expect(task.name).toBe('test');
+    expect(task.description).toBe('task test');
+  });
+
+  it('show task', async () => {
+    const task = await models.task.query().findOne({ name: 'test' });
+
+    const response = await app.inject({
+      method: 'GET',
+      url: app.reverse('showTask', { id: task.id }),
+    });
+    expect(response.statusCode).toBe(200);
+  });
+
+  it('edit', async () => {
+    const task = await models.task.query().findOne({ name: 'test' });
+    const responseEditTaskPage = await app.inject({
+      method: 'GET',
+      url: app.reverse('editTaskPage', { id: task.id }),
+    });
+
+    expect(responseEditTaskPage.statusCode).toBe(200);
+
+    const response = await app.inject({
+      method: 'PATCH',
+      url: app.reverse('editTask', { id: task.id }),
+      payload: {
+        data: {
+          ...task,
+          name: 'another task',
+          description: 'local task',
+        },
+      },
+      cookies: cookie,
+    });
+
+    expect(response.statusCode).toBe(302);
+
+    const updatedTask = await models.task.query().findById(task.id);
+    expect(updatedTask.name).toBe('another task');
+  });
+
+  it('delete', async () => {
+    const task = await models.task.query().findOne({ name: 'another task' });
+    const response = await app.inject({
+      mathod: 'DELETE',
+      url: app.reverse('deleteTask', { id: task.id }),
+    });
+
+    expect(response.statusCode).toBe(200);
   });
 
   afterAll(async () => {

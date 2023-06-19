@@ -10,15 +10,48 @@ mixin input(entity, propertyName, errors = {})
   - classLine = 'form-control' + (_.isEmpty(propertyErrors) ? '' : ' is-invalid')
   - inputId = getInputId(propertyName)
   .mb-3(class=(errors[propertyName] && 'has-danger'))
-    label(
-      for= inputId
-    )= propertyName
+    label(for= inputId)= propertyName
     input(
       id= inputId
       name=getInputName(propertyName)
       class=classLine
       value=_.get(entity, propertyName, '')
     )&attributes(attributes)
+    if !_.isEmpty(propertyErrors)
+      .invalid-feedback= propertyErrors.map(({ message }) => message).join('. ')
+
+mixin textarea(entity, propertyName, errors = {})
+  - propertyErrors = _.get(errors, propertyName)
+  - classLine = 'form-control' + (_.isEmpty(propertyErrors) ? '' : ' is-invalid')
+  - inputId = getInputId(propertyName)
+  .mb-3(class=(errors[propertyName] && 'has-danger'))
+    label(for= inputId)= propertyName
+    textarea(
+      id= inputId
+      name=getInputName(propertyName)
+      class=classLine
+      rows='3'
+    )&attributes(attributes)
+      | #{_.get(entity, propertyName, '')}
+    if !_.isEmpty(propertyErrors)
+      .invalid-feedback= propertyErrors.map(({ message }) => message).join('. ')
+
+mixin select(entities, propertyName, errors = {}, currentId)
+  - propertyErrors = _.get(errors, propertyName)
+  - classLine = 'form-control' + (_.isEmpty(propertyErrors) ? '' : ' is-invalid')
+  - inputId = getInputId(propertyName)
+  .mb-3(class=(errors[propertyName] && 'has-danger'))
+    label(for= inputId)= propertyName
+    select(
+      id= inputId
+      name=getInputName(propertyName)
+      class=classLine
+    )&attributes(attributes)
+      if !currentId
+        option(value="" selected disabled hidden)
+      each entity in entities || []
+        option(value=entity.id, selected=Number(entity.id) === Number(currentId))
+         | #{entity.firstName ? entity.firstName + ' ' + entity.lastName : entity.name}
     if !_.isEmpty(propertyErrors)
       .invalid-feedback= propertyErrors.map(({ message }) => message).join('. ')
 
