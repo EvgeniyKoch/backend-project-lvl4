@@ -7,7 +7,7 @@ import init from '../server/plugin.js';
 import encrypt from '../server/lib/secure.cjs';
 import { getTestData, prepareData } from './helpers/index.js';
 
-describe.skip('test users CRUD', () => {
+describe('test users CRUD', () => {
   let app;
   let knex;
   let models;
@@ -115,10 +115,20 @@ describe.skip('test users CRUD', () => {
     expect(updatedUser.lastName).toBe(update.lastName);
   });
 
+  it('can\'t delete user becouse he\'s task', async () => {
+    const user = await models.user.query().findById(1);
+    const responseDeleted = await app.inject({
+      method: 'DELETE',
+      url: app.reverse('deleteUser', { id: user.id }),
+      cookies,
+    });
+
+    expect(responseDeleted.statusCode).toBe(403);
+  });
+
   it('delete', async () => {
     const { update } = testData.users;
     const user = await models.user.query().findOne({ email: update.email });
-
     const responseDeleted = await app.inject({
       method: 'DELETE',
       url: app.reverse('deleteUser', { id: user.id }),
@@ -128,11 +138,11 @@ describe.skip('test users CRUD', () => {
     expect(responseDeleted.statusCode).toBe(302);
   });
 
-  afterEach(async () => {
-    // Пока Segmentation fault: 11
-    // после каждого теста откатываем миграции
-    await knex.migrate.rollback();
-  });
+  // afterEach(async () => {
+  // Пока Segmentation fault: 11
+  // после каждого теста откатываем миграции
+  // await knex.migrate.rollback();
+  // });
 
   afterAll(async () => {
     await app.close();

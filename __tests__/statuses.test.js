@@ -76,6 +76,27 @@ describe('test statuses CRUD', () => {
     expect(updatedStatus.name).toBe('another task');
   });
 
+  it('can\'t delete status becouse it assign task', async () => {
+    const status = await models.status.query().findById(1);
+
+    const responseDeleted = await app.inject({
+      method: 'DELETE',
+      url: app.reverse('deleteUser', { id: status.id }),
+    });
+
+    expect(responseDeleted.statusCode).toBe(403);
+  });
+
+  it('delete', async () => {
+    const status = await models.status.query().findOne({ name: 'In progress' });
+    const responseDeleted = await app.inject({
+      method: 'DELETE',
+      url: app.reverse('deleteStatus', { id: status.id }),
+    });
+
+    expect(responseDeleted.statusCode).toBe(302);
+  });
+
   afterAll(async () => {
     await app.close();
   });
