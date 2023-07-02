@@ -1,0 +1,16 @@
+[
+  {
+    "name": "Task for user 1",
+    "description": "task for user 1",
+    "statusId": "2",
+    "creatorId": "1",
+    "executorId": "1"
+  },
+  {
+    "name": "Task for user 2",
+    "description": "task for user 2",
+    "statusId": "1",
+    "creatorId": "2",
+    "executorId": "2"
+  }
+]

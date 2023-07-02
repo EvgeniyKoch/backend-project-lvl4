@@ -49,6 +49,14 @@ export default (app) => {
       return reply;
     })
     .delete('/statuses/:id', { name: 'deleteStatus' }, async (req, reply) => {
+      const task = await app.objection.models.task.query().where('statusId', req.params.id);
+
+      if (task.length > 0) {
+        req.flash('error', i18next.t('flash.statuses.delete.isExecutor'));
+        reply.code(403).send();
+        return;
+      }
+
       const deletedCount = await app.objection.models.status.query().deleteById(req.params.id);
       if (deletedCount === 1) {
         req.flash('info', i18next.t('flash.statuses.delete.success'));

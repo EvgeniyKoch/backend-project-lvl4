@@ -28,6 +28,7 @@ export default {
           success: 'User successfully deleted',
           error: 'User deleted failed',
           notAvalible: 'You can\'t  delete other user',
+          isExecutor: 'You can\'t  delete user, he has task',
         },
       },
       statuses: {
@@ -43,6 +44,7 @@ export default {
         delete: {
           error: 'Failed to delete status',
           success: 'Status was deleted',
+          isExecutor: 'You can\'t  delete status, it\'s assigned to a task',
         },
       },
       tasks: {

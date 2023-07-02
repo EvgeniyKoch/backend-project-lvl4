@@ -1,6 +1,7 @@
 // @ts-check
 
 import i18next from 'i18next';
+
 export default (app) => {
   app
     .get('/users', { name: 'users' }, async (_, reply) => {
@@ -56,6 +57,14 @@ export default (app) => {
       return reply;
     })
     .delete('/users/:id', { name: 'deleteUser' }, async (req, reply) => {
+      const task = await app.objection.models.task.query().where('executorId', req.params.id);
+
+      if (task.length > 0) {
+        req.flash('error', i18next.t('flash.users.delete.isExecutor'));
+        reply.code(403).send();
+        return;
+      }
+
       if (req.user.id.toString() === req.params.id) {
         const deletedCount = await app.objection.models.user.query().deleteById(req.params.id);
         if (deletedCount === 1) {
@@ -66,11 +75,10 @@ export default (app) => {
           req.flash('error', i18next.t('flash.users.delete.error'));
           reply.redirect(app.reverse('users'));
         }
-        return reply;
+        return;
       }
 
       req.flash('error', i18next.t('flash.users.delete.notAvalible'));
       reply.redirect(app.reverse('users'));
-      return reply;
     });
 };
