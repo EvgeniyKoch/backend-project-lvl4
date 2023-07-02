@@ -10,5 +10,6 @@ block content
                 +input(task, 'name', errors)(type="text")
                 +textarea(task, 'description', errors)
                 +select(task.statuses, 'statusId', errors)
+                +select(task.labels, 'labelId', errors)
                 +select(task.users, 'executorId', errors)
                 +submit(task)(value=t('views.tasks.create'))

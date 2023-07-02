@@ -4,6 +4,7 @@ const User = require('./User.cjs');
 const Status = require('./Status.cjs');
 
 const objectionUnique = require('objection-unique');
+const Label = require("./Label.cjs");
 const unique = objectionUnique({ fields: ['name'] });
 
 module.exports = class Task extends unique(BaseModel) {
@@ -21,6 +22,14 @@ module.exports = class Task extends unique(BaseModel) {
                     to: 'statuses.id',
                 }
             },
+           label: {
+                relation: BaseModel.BelongsToOneRelation,
+                modelClass: Label,
+                join: {
+                    from: 'task.statusId',
+                    to: 'labels.id',
+                }
+           },
            creator: {
                 relation: BaseModel.BelongsToOneRelation,
                 modelClass: User,

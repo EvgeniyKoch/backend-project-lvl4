@@ -1,14 +1,11 @@
 [
   {
-    "id": 1,
     "name": "Open"
   },
   {
-    "id": 2,
     "name": "Close"
   },
   {
-    "id": 3,
     "name": "In progress"
   }
 ]

@@ -1,0 +1,22 @@
+extends ../layouts/application.pug
+
+block content
+    h1(class="display-4 fw-bold mt-4")=t('views.labels.title')
+    a.btn.btn-info(href=route('newLabel') role='button')=t('views.labels.create.title')
+    table.table.table-striped
+        thead
+            tr
+                th= t('views.labels.table.id')
+                th= t('views.labels.table.name')
+                th= t('views.labels.table.date')
+        tbody
+            each label in labels
+                tr
+                    td= label.id
+                    td= label.name
+                    td= label.createdAt
+                    td
+                        .btn-group(role='group' aria-label='Basic mixed styles example')
+                            a.btn.btn-info(href=route('editLabelPage', { id: label.id }) role='button') Edit
+                            +buttonTo(route('deleteLabel', { id: label.id }), 'delete')(class="btn btn-danger" value='Delete')
+

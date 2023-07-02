@@ -61,7 +61,7 @@ export default (app) => {
 
       if (task.length > 0) {
         req.flash('error', i18next.t('flash.users.delete.isExecutor'));
-        reply.code(403).send();
+        reply.redirect(app.reverse('users')).code(409);
         return;
       }
 
