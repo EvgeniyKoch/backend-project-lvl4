@@ -17,7 +17,8 @@ export default (app) => {
     .get('/tasks/new', { name: 'newTask' }, async (req, reply) => {
       const statuses = await app.objection.models.status.query();
       const users = await app.objection.models.user.query();
-      const task = { statuses, users };
+      const labels = await app.objection.models.label.query();
+      const task = { statuses, users, labels };
       reply.render('tasks/new', { task });
       return reply;
     })
@@ -66,8 +67,11 @@ export default (app) => {
       const task = await app.objection.models.task.query().findById(taskId);
       const statuses = await app.objection.models.status.query();
       const users = await app.objection.models.user.query();
+      const labels = await app.objection.models.label.query();
 
-      reply.render('tasks/edit', { task, statuses, users });
+      reply.render('tasks/edit', {
+        task, statuses, users, labels,
+      });
       return reply;
     })
     .patch('/task/:id', { name: 'editTask' }, async (req, reply) => {
@@ -76,8 +80,10 @@ export default (app) => {
         ...req.body.data,
         creatorId: Number(req.user.id),
         statusId: Number(req.body.data.statusId),
+        labelId: Number(req.body.data.labelId),
         executorId: Number(req.body.data.executorId),
       };
+
       try {
         const task = await app.objection.models.task.query().findById(id);
         const validTask = await app.objection.models.task.fromJson(updatedTask);
@@ -85,7 +91,7 @@ export default (app) => {
         reply.redirect(app.reverse('tasks'));
       } catch (e) {
         req.flash('error', i18next.t('flash.task.edit.error'));
-        reply.render('task/edit', { task: updatedTask, errors: e.data });
+        reply.render('tasks/edit', { task: updatedTask, errors: e.data });
       }
       return reply;
     })

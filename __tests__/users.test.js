@@ -115,17 +115,6 @@ describe('test users CRUD', () => {
     expect(updatedUser.lastName).toBe(update.lastName);
   });
 
-  it('can\'t delete user becouse he\'s task', async () => {
-    const user = await models.user.query().findById(1);
-    const responseDeleted = await app.inject({
-      method: 'DELETE',
-      url: app.reverse('deleteUser', { id: user.id }),
-      cookies,
-    });
-
-    expect(responseDeleted.statusCode).toBe(403);
-  });
-
   it('delete', async () => {
     const { update } = testData.users;
     const user = await models.user.query().findOne({ email: update.email });

@@ -53,7 +53,7 @@ export default (app) => {
 
       if (task.length > 0) {
         req.flash('error', i18next.t('flash.statuses.delete.isExecutor'));
-        reply.code(403).send();
+        reply.redirect(app.reverse('statuses')).code(409);
         return;
       }
 

@@ -4,7 +4,7 @@ import fastify from 'fastify';
 import init from '../server/plugin.js';
 import { prepareData } from './helpers/index.js';
 
-describe('test statuses CRUD', () => {
+describe('test labels CRUD', () => {
   let app;
   let knex;
   let models;
@@ -26,7 +26,7 @@ describe('test statuses CRUD', () => {
   it('index', async () => {
     const response = await app.inject({
       method: 'GET',
-      url: app.reverse('statuses'),
+      url: app.reverse('labels'),
     });
     expect(response.statusCode).toBe(200);
   });
@@ -34,52 +34,54 @@ describe('test statuses CRUD', () => {
   it('create', async () => {
     const response = await app.inject({
       method: 'GET',
-      url: app.reverse('newStatus'),
+      url: app.reverse('newLabel'),
     });
     expect(response.statusCode).toBe(200);
 
     const responseCreate = await app.inject({
       method: 'POST',
-      url: app.reverse('createStatus'),
+      url: app.reverse('createLabel'),
       payload: {
         data: { name: 'test' },
       },
     });
 
     expect(responseCreate.statusCode).toBe(302);
-    const status = await models.status.query().findOne({ name: 'test' });
 
-    expect(status.name).toBe('test');
+    const label = await models.label.query().findOne({ name: 'test' });
+
+    expect(label.name).toBe('test');
   });
 
   it('edit', async () => {
-    const status = await models.status.query().findOne({ name: 'test' });
+    const label = await models.label.query().findOne({ name: 'test' });
 
-    const responseEditStatusPage = await app.inject({
+    const responseEditLabelPage = await app.inject({
       method: 'GET',
-      url: app.reverse('editStatusPage', { id: status.id }),
+      url: app.reverse('editLabelPage', { id: label.id }),
     });
 
-    expect(responseEditStatusPage.statusCode).toBe(200);
+    expect(responseEditLabelPage.statusCode).toBe(200);
 
     const response = await app.inject({
       method: 'PATCH',
-      url: app.reverse('editStatus', { id: status.id }),
+      url: app.reverse('editLabel', { id: label.id }),
       payload: {
-        data: { name: 'another task' },
+        data: { name: 'another label' },
       },
     });
 
     expect(response.statusCode).toBe(302);
-    const updatedStatus = await models.status.query().findOne({ id: status.id });
-    expect(updatedStatus.name).toBe('another task');
+    const updatedLabel = await models.label.query().findOne({ id: label.id });
+    expect(updatedLabel.name).toBe('another label');
   });
 
   it('delete', async () => {
-    const status = await models.status.query().findOne({ name: 'In progress' });
+    const labels = await models.label.query();
+    const label = await models.label.query().findOne({ name: 'Major' });
     const responseDeleted = await app.inject({
       method: 'DELETE',
-      url: app.reverse('deleteStatus', { id: status.id }),
+      url: app.reverse('deleteLabel', { id: label.id }),
     });
 
     expect(responseDeleted.statusCode).toBe(302);

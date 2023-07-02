@@ -47,6 +47,22 @@ export default {
           isExecutor: 'You can\'t  delete status, it\'s assigned to a task',
         },
       },
+      labels: {
+        new: 'Create label',
+        create: {
+          error: 'Failed to create new label',
+          success: 'Label created',
+        },
+        edit: {
+          error: 'Failed to edit label',
+          success: 'Label edited',
+        },
+        delete: {
+          error: 'Failed to delete label',
+          success: 'Label was deleted',
+          isExecutor: 'You can\'t  delete label, it\'s assigned to a task',
+        },
+      },
       tasks: {
         create: {
           error: 'Failed to create new task',
@@ -71,6 +87,7 @@ export default {
         signOut: 'Logout',
         tasks: 'Tasks',
         statuses: 'Statuses',
+        labels: 'Labels',
       },
     },
     views: {
@@ -112,6 +129,22 @@ export default {
         },
         create: {
           title: 'Create status',
+        },
+      },
+      labels: {
+        title: 'Labels',
+        new: 'Creating a label',
+        edit: {
+          title: 'Editing a label',
+          btn: 'Edit',
+        },
+        table: {
+          id: 'Id',
+          name: 'Name',
+          date: 'Create date',
+        },
+        create: {
+          title: 'Create label',
         },
       },
       tasks: {
