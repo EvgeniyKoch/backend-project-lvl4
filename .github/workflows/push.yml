@@ -20,7 +20,5 @@ jobs:
         run: make ci
       - name: create .env
         run: make prepare-env
-      - name: Test
-        run: make test
       - name: Lint
         run: make lint

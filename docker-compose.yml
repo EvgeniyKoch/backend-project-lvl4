@@ -1,15 +1,9 @@
 version: '3'
 services:
-  backend:
+  app:
     build:
       context: .
-      dockerfile: kochetov/backend-project-v4
+      dockerfile: Dockerfile.production
+    image: kochetov/backend-project-v4
     command: bash -c 'npm run test'
-
-  frontend:
-    build:
-      context: .
-      dockerfile: kochetov/backend-project-v4
-    restart: always
-    depends_on: [backend]
 

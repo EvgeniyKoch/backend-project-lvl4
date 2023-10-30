@@ -31,7 +31,7 @@ compose:
 	docker-compose up  --remove-orphans
 
 ci:
-	docker-compose -f docker-compose.yml up --abort-on-container-exit --exit-code-from
+	docker-compose -f docker-compose.yml up --abort-on-container-exit --exit-code-from backend frontend
 
 stop:
 	docker-compose stop
