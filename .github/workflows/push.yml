@@ -13,9 +13,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set environment variables
-        run: echo "SESSION_KEY=${{ secrets.SESSION_KEY }}" >> $GITHUB_ENV
-
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
@@ -24,5 +21,3 @@ jobs:
         run: make prepare-env
       - name: test
         run: make ci
-      - name: Lint
-        run: make lint

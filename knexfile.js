@@ -25,11 +25,11 @@ export const test = {
   migrations,
 };
 
-// export const production = {
-//   client: 'sqlite3',
-//   connection: {
-//     filename: path.resolve(__dirname, 'database.sqlite'),
-//   },
-//   useNullAsDefault: true,
-//   migrations,
-// };
+export const production = {
+  client: 'sqlite3',
+  connection: {
+    filename: path.resolve(__dirname, 'database.sqlite'),
+  },
+  useNullAsDefault: true,
+  migrations,
+};
