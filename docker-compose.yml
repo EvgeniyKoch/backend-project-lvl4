@@ -3,12 +3,13 @@ services:
   backend:
     build:
       context: .
-      dockerfile: Dockerfile.production
+      dockerfile: kochetov/backend-project-v4
     command: bash -c 'npm run test'
 
   frontend:
     build:
       context: .
-      dockerfile: Dockerfile.production
+      dockerfile: kochetov/backend-project-v4
     restart: always
     depends_on: [backend]
+
