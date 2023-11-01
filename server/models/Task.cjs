@@ -54,10 +54,10 @@ module.exports = class Task extends unique(BaseModel) {
             type: 'object',
             required: ['name', 'statusId', 'creatorId'],
             properties: {
-                id: { type: 'integer', minLength: 1 },
+                id: { type: 'integer' },
                 name: { type: 'string', minLength: 1, maxLength: 255 },
-                statusId: { type: 'integer', minLength: 1 },
-                creatorId: { type: 'integer', minLength: 1 },
+                statusId: { type: 'integer' },
+                creatorId: { type: 'integer' },
             },
         };
     }

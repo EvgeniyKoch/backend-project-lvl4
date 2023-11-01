@@ -12,7 +12,6 @@ export default (app) => {
           },
         });
 
-      console.log(tasks, '+++++++++++++++++++++++++++++++++++++task')
       reply.render('tasks/index', { tasks });
       return reply;
     })
@@ -52,7 +51,6 @@ export default (app) => {
         statusId: Number(req.body.data.statusId),
       };
       task.$set(updatedTask);
-      console.log(updatedTask, '=================udateTask')
       try {
         const validTask = await app.objection.models.task.fromJson(updatedTask);
         await app.objection.models.task.query().insert(validTask);
