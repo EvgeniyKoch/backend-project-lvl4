@@ -1,29 +1,9 @@
 version: '3'
 services:
-  backend:
-    restart: always
+  app:
     build:
       context: .
-      dockerfile: Dockerfile.dev
-    volumes:
-      - /app/node_modules
-      - .:/app
-    ports:
-      - "3000:3000"
+      dockerfile: Dockerfile.production
     environment:
-      NODE_ENV: development
-      DEBUG: app:*
-    command: ["bash", "-c", "make start-backend"]
-
-  frontend:
-    restart: always
-    build:
-      context: .
-      dockerfile: Dockerfile.dev
-    volumes:
-      - /app/node_modules
-      - .:/app
-    environment:
-      NODE_ENV: development
-      DEBUG: app:*
-    command: ["bash", "-c", "make start-frontend"]
+      - NODE_ENV=test
+    command: bash -c 'npm run test'

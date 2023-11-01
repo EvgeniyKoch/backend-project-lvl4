@@ -11,6 +11,7 @@ export default (app) => {
             builder.select('firstName', 'lastName');
           },
         });
+
       reply.render('tasks/index', { tasks });
       return reply;
     })
@@ -50,7 +51,6 @@ export default (app) => {
         statusId: Number(req.body.data.statusId),
       };
       task.$set(updatedTask);
-
       try {
         const validTask = await app.objection.models.task.fromJson(updatedTask);
         await app.objection.models.task.query().insert(validTask);

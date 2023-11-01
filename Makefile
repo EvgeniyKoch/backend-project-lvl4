@@ -1,4 +1,4 @@
-setup: prepare install db-migrate
+setup: prepare-env install db-migrate
 
 install:
 	npm install
@@ -9,7 +9,7 @@ db-migrate:
 build:
 	npm run build
 
-prepare:
+prepare-env:
 	cp -n .env.example .env || true
 
 start:
@@ -26,3 +26,15 @@ lint:
 
 test:
 	npm test -s
+
+compose:
+	docker-compose up  --remove-orphans
+
+ci:
+	docker-compose -f docker-compose.yml up --build --abort-on-container-exit --exit-code-from app
+
+stop:
+	docker-compose stop
+
+remove:
+	docker-compose down

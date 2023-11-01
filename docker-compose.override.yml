@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  backend:
+    environment:
+      - NODE_ENV=development
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    command: bash -c 'make setup && make start-backend'
+    ports:
+      - "3000:3000"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    command: bash -c 'make start-frontend'

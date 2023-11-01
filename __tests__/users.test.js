@@ -81,7 +81,6 @@ describe('test users CRUD', () => {
     });
 
     expect(responseSignIn.statusCode).toBe(302);
-
     // Получаем пользователя
     const user = await models.user.query().findOne({ email: params.email });
     const { update } = testData.users;
