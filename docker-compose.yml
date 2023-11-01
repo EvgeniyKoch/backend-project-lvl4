@@ -4,5 +4,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.production
-    image: kochetov/backend-project-v4
+    environment:
+      - NODE_ENV=test
     command: bash -c 'npm run test'
