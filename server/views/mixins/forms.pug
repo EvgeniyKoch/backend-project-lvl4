@@ -62,3 +62,23 @@ mixin buttonTo(action, method)
   form(action=action, method="post")
     input(name="_method" type="hidden" value=method)
     input(type='submit')&attributes(attributes)
+
+
+mixin searchSelect(entities, propertyName, errors = {})
+  - propertyErrors = _.get(errors, propertyName)
+  - classLine = 'form-select' + (_.isEmpty(propertyErrors) ? '' : ' is-invalid')
+  - inputId = getInputId(propertyName)
+
+  .input-group
+    label.input-group-text(for= inputId)= propertyName
+    select(
+      id= inputId
+      name=getInputName(propertyName)
+      class=classLine
+    )
+      option(value="")
+      each entity in entities || []
+        option(value=entity.id)= entity.name
+    if !_.isEmpty(propertyErrors)
+      .invalid-feedback= propertyErrors.map(({message}) => message).join('. ')
+

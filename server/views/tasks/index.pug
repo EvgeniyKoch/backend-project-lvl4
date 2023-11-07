@@ -3,6 +3,24 @@ extends ../layouts/application.pug
 block content
     h1(class="display-4 fw-bold mt-4")=t('layouts.application.tasks')
     a.btn.btn-info(href=route('newTask') role='button')=t('views.tasks.create')
+    .card.shadow-sm.mt-5.mb-5
+        .card-body.p-4
+            +formFor()(action=route('tasks') method='get')
+                .row
+                    .col-12.col-md
+                        .input-group.mb-3
+                            +searchSelect(statuses, 'statuses', errors)
+                    .col-12.col-md
+                        .input-group.mb-3
+                            +searchSelect(executors, 'executors', errors)
+                    .col-12.col-md
+                        .input-group.mb-3
+                            +searchSelect(labels, 'labels', errors)
+                    .mb-3.form-check
+                        input#data_isCreatorUser.form-check-input(type='checkbox' name='isCreatorUser' checked='on')
+                        label.form-check-label(for='data_isCreatorUser') &Tcy;&ocy;&lcy;&softcy;&kcy;&ocy; &mcy;&ocy;&icy; &zcy;&acy;&dcy;&acy;&chcy;&icy;
+                    input.btn.btn-primary(type='submit' value='Показать')
+
     table.table.table-striped
         thead
             tr

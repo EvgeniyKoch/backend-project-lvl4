@@ -4,6 +4,8 @@ import i18next from 'i18next';
 export default (app) => {
   app
     .get('/tasks', { name: 'tasks' }, async (req, reply) => {
+      const statuses = await app.objection.models.status.query();
+      const labels = await app.objection.models.label.query();
       const tasks = await app.objection.models.task.query()
         .withGraphFetched('[creator(selectFullName), executor(selectFullName), status]')
         .modifiers({
@@ -12,7 +14,14 @@ export default (app) => {
           },
         });
 
-      reply.render('tasks/index', { tasks });
+      const executors = tasks.map((task) => ({
+        id: task.executorId,
+        name: `${task.executor.firstName} ${task.executor.lastName}`,
+      }));
+
+      reply.render('tasks/index', {
+        tasks, statuses, labels, executors,
+      });
       return reply;
     })
     .get('/tasks/new', { name: 'newTask' }, async (req, reply) => {
