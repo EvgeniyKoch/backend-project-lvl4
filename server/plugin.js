@@ -23,11 +23,18 @@ import getHelpers from './helpers/index.js';
 import * as knexConfig from '../knexfile.js';
 import models from './models/index.js';
 import FormStrategy from './lib/passportStrategies/FormStrategy.js';
+import Rollbar from 'rollbar';
 
 const __dirname = fileURLToPath(path.dirname(import.meta.url));
 
 const mode = process.env.NODE_ENV || 'development';
 const isDevelopment = mode === 'development';
+
+const rollbar = new Rollbar({
+  accessToken: process.env.ROLLBAR_TOKEN,
+  captureUncaught: true,
+  captureUnhandledRejections: true,
+});
 
 const setUpViews = (app) => {
   const helpers = getHelpers(app);
@@ -75,6 +82,11 @@ const addHooks = (app) => {
       isAuthenticated: () => req.isAuthenticated(),
     };
   });
+  app.addHook('onRequest', async (req, reply) => {
+    if (req.query) {
+      req.query = qs.parse(req.query);
+    }
+  });
 };
 
 const registerPlugins = async (app) => {
@@ -116,11 +128,21 @@ export const options = {
   exposeHeadRoutes: false,
 };
 
+const addRollbarErrorHandler = (app) => {
+  app.setErrorHandler((error, request, reply) => {
+    rollbar.error(error, request);
+
+    app.log.error(error);
+    reply.send(error);
+  });
+};
+
 // eslint-disable-next-line no-unused-vars
 export default async (app, _options) => {
   await registerPlugins(app);
 
   await setupLocalization();
+  addRollbarErrorHandler(app);
   setUpViews(app);
   setUpStaticAssets(app);
   addRoutes(app);

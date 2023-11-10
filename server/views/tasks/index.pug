@@ -3,6 +3,24 @@ extends ../layouts/application.pug
 block content
     h1(class="display-4 fw-bold mt-4")=t('layouts.application.tasks')
     a.btn.btn-info(href=route('newTask') role='button')=t('views.tasks.create')
+    .card.shadow-sm.mt-5.mb-5
+        .card-body.p-4
+            +formFor()(action=route('tasks') method='get')
+                .row
+                    .col-12.col-md
+                        .input-group.mb-3
+                            +searchSelect(statuses, 'statuses', params.statusId)
+                    .col-12.col-md
+                        .input-group.mb-3
+                            +searchSelect(executors, 'executors', params.executorId)
+                    .col-12.col-md
+                        .input-group.mb-3
+                            +searchSelect(labels, 'labels', params.labelId)
+                    .mb-3.form-check
+                        input#data_isCreatorUser.form-check-input(type='checkbox' checked=(!!params.isCreatorUser) name='data[isCreatorUser]')
+                        label.form-check-label(for='data_isCreatorUser') Just my tasks
+                    +submit()(value=t('views.tasks.show'))
+
     table.table.table-striped
         thead
             tr

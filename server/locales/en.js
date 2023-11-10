@@ -149,6 +149,7 @@ export default {
       },
       tasks: {
         create: 'Create task',
+        show: 'Show tasks',
         edit: {
           title: 'Editing task',
           btn: 'Edit',
