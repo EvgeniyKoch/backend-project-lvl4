@@ -4,24 +4,48 @@ import i18next from 'i18next';
 export default (app) => {
   app
     .get('/tasks', { name: 'tasks' }, async (req, reply) => {
-      const statuses = await app.objection.models.status.query();
-      const labels = await app.objection.models.label.query();
-      const tasks = await app.objection.models.task.query()
-        .withGraphFetched('[creator(selectFullName), executor(selectFullName), status]')
-        .modifiers({
-          selectFullName: (builder) => {
-            builder.select('firstName', 'lastName');
+      try {
+        const { data } = req.query;
+        const { models } = app.objection;
+
+        const [statuses, labels] = await Promise.all([
+          models.status.query(),
+          models.label.query(),
+        ]);
+
+        const query = models.task.query()
+          .withGraphJoined('[creator(selectFullName), executor(selectFullName), status]')
+          .modifiers({ selectFullName: (builder) => builder.select('firstName', 'lastName') })
+          .modify((builder) => {
+            if (data?.statuses) builder.where('statusId', data.statuses);
+            if (data?.executors) builder.where('executorId', data.executors);
+            if (data?.labels) builder.where('labelId', data.labels);
+            if (data?.isCreatorUser) builder.where('creatorId', req.user.id);
+          });
+
+        const tasks = await query;
+
+        const executors = Array.from(new Map(tasks.map((task) => [
+          task.executorId,
+          { id: task.executorId, name: `${task.executor.firstName} ${task.executor.lastName}` },
+        ])).values());
+
+        reply.render('tasks/index', {
+          tasks,
+          statuses,
+          labels,
+          executors,
+          params: {
+            statusId: data?.statuses,
+            labelId: data?.labels,
+            executorId: data?.executors,
+            isCreatorUser: data?.isCreatorUser,
           },
         });
+      } catch (error) {
+        reply.code(500).send({ error: 'Internal Server Error' });
+      }
 
-      const executors = tasks.map((task) => ({
-        id: task.executorId,
-        name: `${task.executor.firstName} ${task.executor.lastName}`,
-      }));
-
-      reply.render('tasks/index', {
-        tasks, statuses, labels, executors,
-      });
       return reply;
     })
     .get('/tasks/new', { name: 'newTask' }, async (req, reply) => {

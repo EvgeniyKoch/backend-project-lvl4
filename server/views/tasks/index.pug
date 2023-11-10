@@ -9,17 +9,17 @@ block content
                 .row
                     .col-12.col-md
                         .input-group.mb-3
-                            +searchSelect(statuses, 'statuses', errors)
+                            +searchSelect(statuses, 'statuses', params.statusId)
                     .col-12.col-md
                         .input-group.mb-3
-                            +searchSelect(executors, 'executors', errors)
+                            +searchSelect(executors, 'executors', params.executorId)
                     .col-12.col-md
                         .input-group.mb-3
-                            +searchSelect(labels, 'labels', errors)
+                            +searchSelect(labels, 'labels', params.labelId)
                     .mb-3.form-check
-                        input#data_isCreatorUser.form-check-input(type='checkbox' name='isCreatorUser' checked='on')
-                        label.form-check-label(for='data_isCreatorUser') &Tcy;&ocy;&lcy;&softcy;&kcy;&ocy; &mcy;&ocy;&icy; &zcy;&acy;&dcy;&acy;&chcy;&icy;
-                    input.btn.btn-primary(type='submit' value='Показать')
+                        input#data_isCreatorUser.form-check-input(type='checkbox' checked=(!!params.isCreatorUser) name='data[isCreatorUser]')
+                        label.form-check-label(for='data_isCreatorUser') Just my tasks
+                    +submit()(value=t('views.tasks.show'))
 
     table.table.table-striped
         thead

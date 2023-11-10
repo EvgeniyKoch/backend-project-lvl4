@@ -64,8 +64,7 @@ mixin buttonTo(action, method)
     input(type='submit')&attributes(attributes)
 
 
-mixin searchSelect(entities, propertyName, errors = {})
-  - propertyErrors = _.get(errors, propertyName)
+mixin searchSelect(entities, propertyName, currentId)
   - classLine = 'form-select' + (_.isEmpty(propertyErrors) ? '' : ' is-invalid')
   - inputId = getInputId(propertyName)
 
@@ -75,10 +74,10 @@ mixin searchSelect(entities, propertyName, errors = {})
       id= inputId
       name=getInputName(propertyName)
       class=classLine
-    )
-      option(value="")
+    )&attributes(attributes)
+      if !currentId
+        option(value="" selected disabled hidden)
       each entity in entities || []
-        option(value=entity.id)= entity.name
-    if !_.isEmpty(propertyErrors)
-      .invalid-feedback= propertyErrors.map(({message}) => message).join('. ')
+        option(value=entity.id, selected=Number(entity.id) === Number(currentId))= entity.name
+
 
