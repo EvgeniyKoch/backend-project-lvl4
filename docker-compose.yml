@@ -4,6 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.production
+    image: kochetov/backend-project-v4
     environment:
       NODE_ENV: test
       SESSION_KEY: ${SESSION_KEY}
