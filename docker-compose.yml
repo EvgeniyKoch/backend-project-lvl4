@@ -5,5 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile.production
     environment:
-      - NODE_ENV=test
+      NODE_ENV: test
+      SESSION_KEY: ${SESSION_KEY}
+      ROLLBAR_TOKEN: ${ROLLBAR_TOKEN}
     command: bash -c 'npm run test'
