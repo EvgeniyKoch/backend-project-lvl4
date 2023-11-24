@@ -15,6 +15,7 @@ import qs from 'qs';
 import Pug from 'pug';
 import i18next from 'i18next';
 
+import Rollbar from 'rollbar';
 import ru from './locales/ru.js';
 import en from './locales/en.js';
 // @ts-ignore
@@ -23,7 +24,6 @@ import getHelpers from './helpers/index.js';
 import * as knexConfig from '../knexfile.js';
 import models from './models/index.js';
 import FormStrategy from './lib/passportStrategies/FormStrategy.js';
-import Rollbar from 'rollbar';
 
 const __dirname = fileURLToPath(path.dirname(import.meta.url));
 
@@ -97,13 +97,12 @@ const registerPlugins = async (app) => {
     secret: process.env.SESSION_KEY,
     cookie: {
       path: '/',
+      maxAge: 1800,
     },
   });
 
-  fastifyPassport.registerUserDeserializer(
-    (user) => app.objection.models.user.query().findById(user.id),
-  );
-  fastifyPassport.registerUserSerializer((user) => Promise.resolve(user));
+  fastifyPassport.registerUserSerializer((user) => Promise.resolve(user.id));
+  fastifyPassport.registerUserDeserializer((id) => app.objection.models.user.query().findById(id));
   fastifyPassport.use(new FormStrategy('form', app));
   await app.register(fastifyPassport.initialize());
   await app.register(fastifyPassport.secureSession());

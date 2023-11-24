@@ -29,7 +29,7 @@ export default (app) => {
 
       return reply;
     })
-    .get('/users/:id/edit', { name: 'editUser' }, async (req, reply) => {
+    .get('/users/:id/edit', { name: 'editUser', preValidation: app.authenticate }, async (req, reply) => {
       const { id } = req.params;
 
       if (req.user.id.toString() === id) {
@@ -56,7 +56,7 @@ export default (app) => {
 
       return reply;
     })
-    .delete('/users/:id', { name: 'deleteUser' }, async (req, reply) => {
+    .delete('/users/:id', { name: 'deleteUser', preValidation: app.authenticate }, async (req, reply) => {
       const task = await app.objection.models.task.query().where('executorId', req.params.id);
 
       if (task.length > 0) {

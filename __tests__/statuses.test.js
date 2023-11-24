@@ -2,12 +2,14 @@
 import fastify from 'fastify';
 
 import init from '../server/plugin.js';
-import { prepareData } from './helpers/index.js';
+import {getTestData, prepareData} from './helpers/index.js';
 
 describe('test statuses CRUD', () => {
   let app;
   let knex;
   let models;
+  let cookie;
+  const testData = getTestData();
 
   beforeAll(async () => {
     app = fastify({
@@ -21,12 +23,24 @@ describe('test statuses CRUD', () => {
     await prepareData(app);
   });
 
-  beforeEach(async () => {});
+  beforeEach(async () => {
+    const responseSignIn = await app.inject({
+      method: 'POST',
+      url: app.reverse('session'),
+      payload: {
+        data: testData.users.existing,
+      },
+    });
+    const [sessionCookie] = responseSignIn.cookies;
+    const { name, value } = sessionCookie;
+    cookie = { [name]: value };
+  });
 
   it('index', async () => {
     const response = await app.inject({
       method: 'GET',
       url: app.reverse('statuses'),
+      cookies: cookie,
     });
     expect(response.statusCode).toBe(200);
   });
@@ -35,6 +49,7 @@ describe('test statuses CRUD', () => {
     const response = await app.inject({
       method: 'GET',
       url: app.reverse('newStatus'),
+      cookies: cookie,
     });
     expect(response.statusCode).toBe(200);
 
@@ -58,6 +73,7 @@ describe('test statuses CRUD', () => {
     const responseEditStatusPage = await app.inject({
       method: 'GET',
       url: app.reverse('editStatusPage', { id: status.id }),
+      cookies: cookie,
     });
 
     expect(responseEditStatusPage.statusCode).toBe(200);

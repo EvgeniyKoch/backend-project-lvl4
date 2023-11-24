@@ -3,12 +3,12 @@ import i18next from 'i18next';
 
 export default (app) => {
   app
-    .get('/statuses', { name: 'statuses' }, async (req, reply) => {
+    .get('/statuses', { name: 'statuses', preValidation: app.authenticate }, async (req, reply) => {
       const statuses = await app.objection.models.status.query();
       reply.render('statuses/index', { statuses });
       return reply;
     })
-    .get('/statuses/new', { name: 'newStatus' }, async (req, reply) => {
+    .get('/statuses/new', { name: 'newStatus', preValidation: app.authenticate }, async (req, reply) => {
       const statusesForm = {};
       reply.render('statuses/new', { statusesForm });
       return reply;
@@ -27,7 +27,7 @@ export default (app) => {
       }
       return reply;
     })
-    .get('/statuses/:id/edit', { name: 'editStatusPage' }, async (req, reply) => {
+    .get('/statuses/:id/edit', { name: 'editStatusPage', preValidation: app.authenticate }, async (req, reply) => {
       const { id } = req.params;
       const status = await app.objection.models.status.query().findById(id);
       reply.render('statuses/edit', { status });
