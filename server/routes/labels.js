@@ -3,12 +3,12 @@ import i18next from 'i18next';
 
 export default (app) => {
   app
-    .get('/labels', { name: 'labels' }, async (req, reply) => {
+    .get('/labels', { name: 'labels', preValidation: app.authenticate }, async (req, reply) => {
       const labels = await app.objection.models.label.query();
       reply.render('labels/index', { labels });
       return reply;
     })
-    .get('/labels/new', { name: 'newLabel' }, async (req, reply) => {
+    .get('/labels/new', { name: 'newLabel', preValidation: app.authenticate }, async (req, reply) => {
       const labelsForm = {};
       reply.render('labels/new', { labelsForm });
       return reply;
@@ -27,7 +27,7 @@ export default (app) => {
       }
       return reply;
     })
-    .get('/labels/:id/edit', { name: 'editLabelPage' }, async (req, reply) => {
+    .get('/labels/:id/edit', { name: 'editLabelPage', preValidation: app.authenticate }, async (req, reply) => {
       const { id } = req.params;
       const label = await app.objection.models.label.query().findById(id);
       reply.render('labels/edit', { label });
@@ -48,7 +48,7 @@ export default (app) => {
 
       return reply;
     })
-    .delete('/labels/:id', { name: 'deleteLabel' }, async (req, reply) => {
+    .delete('/labels/:id', { name: 'deleteLabel', preValidation: app.authenticate }, async (req, reply) => {
       const tasks = await app.objection.models.task.query().where('labelId', req.params.id);
       if (tasks.length > 0) {
         req.flash('error', i18next.t('flash.labels.delete.isExecutor'));

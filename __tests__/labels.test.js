@@ -2,12 +2,14 @@
 import fastify from 'fastify';
 
 import init from '../server/plugin.js';
-import { prepareData } from './helpers/index.js';
+import { getTestData, prepareData } from './helpers/index.js';
 
 describe('test labels CRUD', () => {
   let app;
   let knex;
   let models;
+  let cookie;
+  const testData = getTestData();
 
   beforeAll(async () => {
     app = fastify({
@@ -21,12 +23,24 @@ describe('test labels CRUD', () => {
     await prepareData(app);
   });
 
-  beforeEach(async () => {});
+  beforeEach(async () => {
+    const responseSignIn = await app.inject({
+      method: 'POST',
+      url: app.reverse('session'),
+      payload: {
+        data: testData.users.existing,
+      },
+    });
+    const [sessionCookie] = responseSignIn.cookies;
+    const { name, value } = sessionCookie;
+    cookie = { [name]: value };
+  });
 
   it('index', async () => {
     const response = await app.inject({
       method: 'GET',
       url: app.reverse('labels'),
+      cookies: cookie,
     });
     expect(response.statusCode).toBe(200);
   });
@@ -35,6 +49,7 @@ describe('test labels CRUD', () => {
     const response = await app.inject({
       method: 'GET',
       url: app.reverse('newLabel'),
+      cookies: cookie,
     });
     expect(response.statusCode).toBe(200);
 
@@ -59,6 +74,7 @@ describe('test labels CRUD', () => {
     const responseEditLabelPage = await app.inject({
       method: 'GET',
       url: app.reverse('editLabelPage', { id: label.id }),
+      cookies: cookie,
     });
 
     expect(responseEditLabelPage.statusCode).toBe(200);
@@ -77,7 +93,6 @@ describe('test labels CRUD', () => {
   });
 
   it('delete', async () => {
-    const labels = await models.label.query();
     const label = await models.label.query().findOne({ name: 'Major' });
     const responseDeleted = await app.inject({
       method: 'DELETE',

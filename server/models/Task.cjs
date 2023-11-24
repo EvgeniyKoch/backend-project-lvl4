@@ -1,7 +1,7 @@
 // @ts-check
 const BaseModel = require('./BaseModel.cjs');
 const User = require('./User.cjs');
-const Status = require('./Status.cjs');
+const TaskStatus = require('./TaskStatus.cjs');
 
 const objectionUnique = require('objection-unique');
 const Label = require("./Label.cjs");
@@ -16,7 +16,7 @@ module.exports = class Task extends unique(BaseModel) {
        return {
             status: {
                 relation: BaseModel.BelongsToOneRelation,
-                modelClass: Status,
+                modelClass: TaskStatus,
                 join: {
                     from: 'tasks.statusId',
                     to: 'statuses.id',

@@ -3,7 +3,7 @@ import i18next from 'i18next';
 
 export default (app) => {
   app
-    .get('/tasks', { name: 'tasks' }, async (req, reply) => {
+    .get('/tasks', { name: 'tasks', preValidation: app.authenticate }, async (req, reply) => {
       try {
         const { data } = req.query;
         const { models } = app.objection;
@@ -48,7 +48,7 @@ export default (app) => {
 
       return reply;
     })
-    .get('/tasks/new', { name: 'newTask' }, async (req, reply) => {
+    .get('/tasks/new', { name: 'newTask', preValidation: app.authenticate }, async (req, reply) => {
       const statuses = await app.objection.models.status.query();
       const users = await app.objection.models.user.query();
       const labels = await app.objection.models.label.query();
@@ -56,7 +56,7 @@ export default (app) => {
       reply.render('tasks/new', { task });
       return reply;
     })
-    .get('/tasks/:id', { name: 'showTask' }, async (req, reply) => {
+    .get('/tasks/:id', { name: 'showTask', preValidation: app.authenticate }, async (req, reply) => {
       const { id } = req.params;
       try {
         const task = await app.objection.models.task.query()
@@ -95,7 +95,7 @@ export default (app) => {
       }
       return reply;
     })
-    .get('/tasks/:id/edit', { name: 'editTaskPage' }, async (req, reply) => {
+    .get('/tasks/:id/edit', { name: 'editTaskPage', preValidation: app.authenticate }, async (req, reply) => {
       const taskId = req.params.id;
       const task = await app.objection.models.task.query().findById(taskId);
       const statuses = await app.objection.models.status.query();
