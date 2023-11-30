@@ -3,9 +3,9 @@ name: Pull_Request
 on:
   push:
     branches:
-      - 'feature/**'
-      - 'fix/**'
-      - 'release/**'
+      - 'feature*'
+      - 'fix*'
+      - 'release*'
 
 
 jobs:
