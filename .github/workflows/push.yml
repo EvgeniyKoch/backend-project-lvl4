@@ -1,6 +1,12 @@
 name: Pull_Request
 
-on: [push]
+on:
+  push:
+    branches:
+      - 'feature/**'
+      - 'bugfix/**'
+      - 'hotfix/**'
+      - 'release/**'
 
 jobs:
   build:
