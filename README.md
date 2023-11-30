@@ -1,14 +1,9 @@
 # fastify-nodejs-application
 
-## Setup
+## Setup and run
 
 ```bash
-make setup
-```
-
-## Run
-
-```bash
+$ make setup
 $ make start
 # Open localhost:5000
 ```

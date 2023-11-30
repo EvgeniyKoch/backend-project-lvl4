@@ -1,8 +1,6 @@
 name: Deploy to Docker Hub
 
-on:
-  pull_request:
-    types: [closed]
+on: [push]
 
 jobs:
   build:
@@ -28,7 +26,6 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
     steps:
       - uses: actions/checkout@v3
       - name: Set up Docker Buildx
