@@ -26,6 +26,7 @@ jobs:
         run: make ci
 
   deploy:
+    needs: build
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
     steps:
@@ -45,7 +46,3 @@ jobs:
           tags: ${{ secrets.DOCKER_USERNAME }}/backend-project-v4:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
-      - name: Move cache
-        run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
