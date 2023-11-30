@@ -8,6 +8,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const migrations = {
   directory: path.join(__dirname, 'server', 'migrations'),
 };
+
 export const development = {
   client: 'sqlite3',
   connection: {

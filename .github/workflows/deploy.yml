@@ -5,6 +5,26 @@ on:
     types: [closed]
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [ 18.x ]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: test
+        env:
+          SESSION_KEY: ${{ secrets.SESSION_KEY }}
+          ROLLBAR_TOKEN: ${{ secrets.ROLLBAR_TOKEN }}
+        run: make ci
+
   deploy:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
